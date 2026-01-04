@@ -1437,8 +1437,47 @@ body {
    ======================================== */
 
 @media (max-width: 768px) {
+    /* Make navbar stack and center on smaller screens */
+    .navbar {
+        padding: 0.75rem 0;
+    }
+
+    .navbar .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .logo h1 {
+        font-size: 1.25rem;
+        text-align: center;
+        white-space: normal;
+        line-height: 1.1;
+    }
+
     .nav-links {
         gap: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links li {
+        margin: 0;
+    }
+
+    .nav-links a {
+        font-size: 0.95rem;
+        padding: 0.35rem 0.6rem;
+        display: inline-block;
+    }
+
+    /* Tame hero spacing on tablets */
+    .hero {
+        padding: 5rem 0;
     }
 
     .hero h1 {
@@ -1472,25 +1511,36 @@ body {
 }
 
 @media (max-width: 600px) {
-    .logo h1 {
-        font-size: 1.3rem;
+    /* Further compress header and hero for small phones */
+    .navbar .container {
+        align-items: center;
+        gap: 0.4rem;
     }
 
+    .logo h1 {
+        font-size: 1.05rem;
+        text-align: center;
+        line-height: 1.05;
+    }
+
+    /* Keep links readable but compact and allow wrapping */
     .nav-links {
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .hero {
-        padding: 4rem 0;
+        padding: 3rem 0;
     }
 
     .hero h1 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     .cta-button {
-        padding: 0.8rem 2rem;
+        padding: 0.7rem 1.4rem;
         font-size: 0.9rem;
     }
 
