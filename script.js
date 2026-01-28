@@ -900,7 +900,15 @@ async function sendChatMessage() {
             body: JSON.stringify({ message })
         });
         
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
+        
+        if (!data.response) {
+            throw new Error('No response from server');
+        }
         
         // Add bot response
         const botMessageDiv = document.createElement('div');
@@ -914,7 +922,7 @@ async function sendChatMessage() {
         console.error('Chat error:', error);
         const errorDiv = document.createElement('div');
         errorDiv.className = 'chat-message bot-message';
-        errorDiv.innerHTML = '<p>Sorry, I couldn\'t process that. Please try again.</p>';
+        errorDiv.innerHTML = '<p>Sorry, I couldn\'t process that. Please try again. (Error: ' + error.message + ')</p>';
         messagesContainer.appendChild(errorDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
