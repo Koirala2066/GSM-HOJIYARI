@@ -248,9 +248,10 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.innerHTML = '✨ Sending... ✨';
             submitBtn.style.opacity = '0.7';
 
-            // Try sending to local API endpoint
+            // Send the message through the website backend.
             try {
-                const resp = await fetch('/api/message', {
+                const apiBaseUrl = (window.GSM_API_BASE_URL || '').replace(/\/$/, '');
+                const resp = await fetch(`${apiBaseUrl}/api/message`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, message })
@@ -285,9 +286,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (err) {
                 console.error('Failed to send message:', err);
+                const unavailable = err instanceof TypeError;
                 showNotification(
-                    '💬 Can\'t Send Right Now',
-                    'Try WhatsApp or call us directly for instant chat!',
+                    unavailable ? '💬 Email Form Unavailable' : '💬 Message Not Sent',
+                    unavailable
+                        ? 'The website email service is not connected. Please use WhatsApp or call us.'
+                        : 'Your message was not sent. Please try WhatsApp or call us directly.',
                     'error'
                 );
                 submitBtn.disabled = false;
