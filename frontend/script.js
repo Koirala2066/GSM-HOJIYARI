@@ -109,6 +109,42 @@ function scrollToProducts() {
  * Add hover animations to product cards
  */
 document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navigation = document.querySelector('.nav-links');
+
+    if (menuToggle && navigation) {
+        const closeMenu = () => {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            menuToggle.setAttribute('aria-label', 'Open navigation menu');
+            navigation.classList.remove('is-open');
+        };
+
+        menuToggle.addEventListener('click', () => {
+            const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', String(!isOpen));
+            menuToggle.setAttribute('aria-label', isOpen ? 'Open navigation menu' : 'Close navigation menu');
+            navigation.classList.toggle('is-open', !isOpen);
+        });
+
+        navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') closeMenu();
+        });
+        document.addEventListener('click', event => {
+            if (!navigation.contains(event.target) && !menuToggle.contains(event.target)) closeMenu();
+        });
+    }
+
+    const locationCard = document.querySelector('.location-card');
+    if (locationCard) {
+        locationCard.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openLocationModal();
+            }
+        });
+    }
+
     const productCards = document.querySelectorAll('.product-card');
     
     productCards.forEach((card, index) => {
@@ -312,13 +348,21 @@ document.addEventListener('DOMContentLoaded', function() {
 function showNotification(title, message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <h4>${title}</h4>
-            <p>${message}</p>
-        </div>
-        <button class="notification-close" onclick="this.parentElement.remove()">×</button>
-    `;
+    const content = document.createElement('div');
+    content.className = 'notification-content';
+    const heading = document.createElement('h4');
+    heading.textContent = title;
+    const body = document.createElement('p');
+    body.textContent = message;
+    content.append(heading, body);
+
+    const closeButton = document.createElement('button');
+    closeButton.className = 'notification-close';
+    closeButton.type = 'button';
+    closeButton.setAttribute('aria-label', 'Close notification');
+    closeButton.textContent = '×';
+    closeButton.addEventListener('click', () => notification.remove());
+    notification.append(content, closeButton);
     
     // Add styles dynamically if not already added
     if (!document.getElementById('notification-styles')) {
